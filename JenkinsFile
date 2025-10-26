@@ -2,41 +2,27 @@ pipeline {
     agent any
 
     stages {
-        stage('Checkout') {
-            steps {
-                echo 'Cloning repository...'
-                checkout scm
-            }
-        }
-
-        stage('Build') {
-            steps {
-                echo 'Building the project...'
-                sh 'cat run.py'
-            }
-        }
-
-        stage('Test') {
-            steps {
-                echo 'Running tests...'
-                sh 'echo "Tests passed!"'
-            }
-        }
-
-        stage('Deploy') {
-            steps {
-                echo 'Deploying application...'
-                sh 'echo "Deployment complete!"'
+        stage('Parallel Build') {
+            parallel {
+                stage('Frontend') {
+                    steps {
+                        echo 'Building frontend...'
+                        sh 'sleep 5'
+                        echo 'Frontend build done.'
+                    }
+                }
+                stage('Backend') {
+                    steps {
+                        echo 'Building backend...'
+                        sh 'sleep 5'
+                        echo 'Backend build done.'
+                    }
+                }
             }
         }
     }
 
     post {
-        success {
-            echo 'Pipeline executed successfully ✅'
-        }
-        failure {
-            echo 'Pipeline failed ❌'
-        }
+        success { echo 'Parallel stages completed ✅' }
     }
 }
