@@ -1,28 +1,15 @@
 pipeline {
     agent any
 
-    stages {
-        stage('Parallel Build') {
-            parallel {
-                stage('Frontend') {
-                    steps {
-                        echo 'Building frontend...'
-                        sh 'sleep 5'
-                        echo 'Frontend build done.'
-                    }
-                }
-                stage('Backend') {
-                    steps {
-                        echo 'Building backend...'
-                        sh 'sleep 5'
-                        echo 'Backend build done.'
-                    }
-                }
-            }
-        }
+    parameters {
+        choice(name: 'ENV', choices: ['dev', 'staging', 'prod'], description: 'Choose environment')
     }
 
-    post {
-        success { echo 'Parallel stages completed ✅' }
+    stages {
+        stage('Deploy') {
+            steps {
+                echo "Deploying to ${params.ENV} environment..."
+            }
+        }
     }
 }
