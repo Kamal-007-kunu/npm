@@ -1,15 +1,34 @@
+// pipeline {
+//     agent any
+
+//     parameters {
+//         choice(name: 'ENV', choices: ['dev', 'staging', 'prod'], description: 'Choose environment')
+//     }
+
+//     stages {
+//         stage('Deploy') {
+//             steps {
+//                 echo "Deploying to ${params.ENV} environment..."
+//             }
+//         }
+//     }
+// }
+
 pipeline {
     agent any
-
     parameters {
-        choice(name: 'ENV', choices: ['dev', 'staging', 'prod'], description: 'Choose environment')
+        string(name: 'USERNAME', defaultValue: 'DevOpsLearner', description: 'Enter your name')
+        choice(name: 'ENV', choices: ['DEV', 'QA', 'PROD'], description: 'Select the environment')
+        booleanParam(name: 'DEPLOY', defaultValue: true, description: 'Deploy after build?')
     }
-
     stages {
-        stage('Deploy') {
+        stage('Info') {
             steps {
-                echo "Deploying to ${params.ENV} environment..."
+                echo "Hello, ${params.USERNAME}!"
+                echo "Environment selected: ${params.ENV}"
+                echo "Deploy after build: ${params.DEPLOY}"
             }
         }
     }
 }
+
